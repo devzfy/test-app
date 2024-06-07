@@ -1,6 +1,9 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 import Sidebar from "@/components/ui/sidebar";
 import Header from "@/container/header";
 import Course from "../course/course";
+
 const Home = () => {
   return (
     <div className="flex justify-items-stretch">
@@ -8,10 +11,12 @@ const Home = () => {
         <Sidebar />
       </div>
       <div className="w-[80%]">
-          <Header/>
-          <div className="p-7">
-          <Course/>
-          </div>
+        <Header />
+        <div className="p-7">
+            <Routes>
+              <Route path="/course" element={<Course />} />
+            </Routes>
+        </div>
       </div>
     </div>
   );

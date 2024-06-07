@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -12,25 +15,49 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const Auth = () => {
+interface AuthProps {
+  setAuthToken: (token: string) => void;
+}
+
+const Auth: React.FC<AuthProps> = ({ setAuthToken }) => {
+  const [load, setLoad] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+    email: z.string().min(4, {
+      message: "Username must be at least 4 characters.",
     }),
-    password: z.string().min(2, {
-        message: "Password must be at least 2 characters.",
-    })
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
+    }),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
-      password: ""
+      email: "",
+      password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoad(true);
+    try {
+      const response = await axios.post(
+        `https://test.globalmove.uz/api/auth/admin/signin`,
+        {
+          email: values.email,
+          password: values.password,
+        }
+        );
+      
+      const token = response.data.data;
+      window.localStorage.setItem("token", JSON.stringify(token));
+      setAuthToken(token);
+      setLoad(false)
+      
+    } catch(err) {
+      setErrorMessage(err.response.data.message)
+      setLoad(false)
+    }
+  };
 
   return (
     <div className="auth-page grid place-items-center min-h-[100vh] w-full">
@@ -42,12 +69,12 @@ const Auth = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input placeholder="Email" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -60,14 +87,18 @@ const Auth = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" {...field} />
+                    <Input type="password" placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
-            <Button className="w-full" type="submit">Login</Button>
+
+              {errorMessage !== '' ? <span className="text-sm mt-1 text-red-500">{errorMessage}</span> : null}
+            <Button disabled={load ? true : false}  className="w-full" type="submit">
+              {load ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait ...</> : "Login"}
+
+            </Button>
           </form>
         </Form>
       </div>

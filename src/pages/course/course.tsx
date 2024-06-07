@@ -1,5 +1,5 @@
 import { tableData } from "@/assets/data";
-import GetData from "@/components/hooks/getdata";
+import useGetData from "@/components/hooks/getdata";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/table";
 import { Eye, Pen, Trash, Play } from "lucide-react";
 const Course = () => {
-    const [data, loading, error] = GetData('courses/active')
-    if(!loading) return 'Loading'
+    const [loading, data, error] = useGetData('courses/active')
+    if(loading) return 'Loading'
     if(error) return alert(error)
+    console.log(data.data, 'data');
+        
 
-
-    console.log(data, 'sa');
     
   return (
     <div className="w-full  border-2 rounded-md">

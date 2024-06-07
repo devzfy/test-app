@@ -1,8 +1,10 @@
 import { Dices } from "lucide-react";
 import { Button } from "./button";
 import { mapData } from "@/assets/data";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <div className="w-full border-r-gray-300 border-r-2 min-h-screen ">
       <div className="flex items-center py-3 pl-3 border-b-2 h-16">
@@ -18,6 +20,7 @@ const Sidebar = () => {
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start mb-2.5"
+                onClick={()=>navigate('/course')}
               >
                 {el.icon}
                 <span className="font-bold text-1xl">{el.name}</span>

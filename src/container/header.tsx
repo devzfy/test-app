@@ -1,6 +1,7 @@
 import { FoldHorizontal, Sun, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,6 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const handelLogOut = ()=>{
+    localStorage.removeItem('token')
+    navigate('/')
+  }
   const [mode, setMode] = useState("light");
   const [profile, setProfile] = useState(`false`);
   return (
@@ -75,7 +81,7 @@ const Header = () => {
                     <User />
                     Profl
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer font-600 text-lg gap-2">
+                  <DropdownMenuItem onClick={()=>{handelLogOut()}} className="cursor-pointer font-600 text-lg gap-2">
                     <LogOut />
                     Chiqish
                   </DropdownMenuItem>
