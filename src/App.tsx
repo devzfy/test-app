@@ -1,22 +1,42 @@
-import { useEffect, useState } from "react"
-import Auth from "./pages/auth/auth"
-import Home from "./pages/home/home"
-import { BrowserRouter as Router } from "react-router-dom";
-
+import Auth from "./pages/auth/auth";
+import Home from "./pages/home/home";
+import { Routes, Route } from "react-router-dom";
+import Header from "./container/header";
+import Course from "./pages/course/course";
+import Sidebar from "./components/ui/sidebar";
+import { useTheme } from "./components/ui/themeProvider";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "./components/ui/toaster";
+import { useEffect } from "react";
 function App() {
-  const [checkToken , setToken] = useState<string | null>(null);
-  useEffect(()=>{
-    const storedToken = localStorage.getItem('token')
-    if(storedToken !== ""){
-      setToken(storedToken)
-    }
-  },[checkToken])
-  return <div>
-    {
-      checkToken  ? <Router><Home/></Router> : <Auth setAuthToken={setToken}/>
-    }
-  </div>
-  // logical wrong
-} 
+  const { token } = useTheme();
+  const { toast } = useToast();
 
-export default App
+  useEffect(() => {
+    toast({ 
+      title: "Muvaffaqiyat!",
+      description: "UzChess platformasiga hush kelibsiz",
+    });
+  }, []);
+  if (!token) return <Auth />;
+  return (
+    <div className="flex justify-between">
+      <div className="">
+        <Sidebar />
+      </div>
+      <div className="w-full">
+        <Header />
+        <div className="p-7">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/course" element={<Course />} />
+          </Routes>
+        </div>
+      </div>
+      <Toaster/>
+    </div>
+  );
+  // logical wrong
+}
+
+export default App;

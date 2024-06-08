@@ -18,55 +18,68 @@ import {
 export const  mapData = [
     {
         name: 'Courses',
-        icon: <BookAudio className="mr-2"/>
+        icon: <BookAudio />,
+        route: '/course',
     },
     {
         name: 'Grandmaster',
-        icon: <Medal className="mr-2"/>
+        icon: <Medal />,
+        route: '/grandmaster',
     },
     {
         name: 'News',
-        icon: <Newspaper className="mr-2"/>
+        icon: <Newspaper />,
+        route: '/news',
     },
     {
         name: 'Books',
-        icon: <LibraryBig className="mr-2"/>
+        icon: <LibraryBig />,
+        route: '/books',
     },
     {
         name: 'Afisha',
-        icon: <File className="mr-2"/>
+        icon: <File />,
+        route: '/afisha',
     },
     {
         name: 'Tournaments',
-        icon: <Sword className="mr-2"/>
+        icon: <Sword />,
+        route: '/tournaments',
     },
     {
         name: 'Moduls',
-        icon: <Box className="mr-2"/>
+        icon: <Box />,
+        route: '/moduls',
     },
     {
         name: 'Lessons',
-        icon: <BookOpenCheck className="mr-2"/>
+        icon: <BookOpenCheck />,
+        route: '/lessons',
     },
     {
         name: 'Quiz',
-        icon: <FileQuestion className="mr-2"/>
+        icon: <FileQuestion />,
+        route: '/quiz',
     },
     {
         name: 'Live Streams',
-        icon: <Radio className="mr-2"/>
+        icon: <Radio />,
+        route: '/live-streams',
     },
     {
         name: 'Puzzles',
-        icon: <Puzzle className="mr-2"/>
+        icon: <Puzzle />,
+        route: '/puzzles',
     },
     {
         name: 'Teachers',
-        icon: <Users className="mr-2"/>
+        icon: <Users />,
+        route: '/teachers',
     },
     {
         name: 'Notification',
-        icon: <Bell className="mr-2"/>
+        icon: <Bell />,
+        route: '/notifications',
     },
 
 ]

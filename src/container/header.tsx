@@ -1,7 +1,6 @@
 import { FoldHorizontal, Sun, User, LogOut } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/components/ui/themeProvider";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,18 +11,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const Header = () => {
-  const navigate = useNavigate();
+  const {setTheme, toggleClass, removeToken} = useTheme("light");
   const handelLogOut = ()=>{
-    localStorage.removeItem('token')
-    navigate('/')
+    removeToken()
   }
-  const [mode, setMode] = useState("light");
-  const [profile, setProfile] = useState(`false`);
+  
+  
+
   return (
     <div>
       <div className="header w-full border-b-2  p-3 h-16 flex justify-between">
         <div className="">
-          <Button variant="outline" className="p-2 border-2 rounded-lg">
+          <Button onClick={toggleClass} variant="outline" className="p-2 border-2 rounded-lg">
             <FoldHorizontal />
           </Button>
         </div>
@@ -39,7 +38,7 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[200px]" align="end">
-                <DropdownMenuRadioGroup value={mode} onValueChange={setMode}>
+                <DropdownMenuRadioGroup stringoup  value={setTheme} onValueChange={setTheme}>
                   <DropdownMenuRadioItem
                     value="light"
                     className="cursor-pointer font-600 text-lg"
@@ -73,10 +72,7 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[200px]" align="end">
-                <DropdownMenuRadioGroup
-                  value={profile}
-                  onValueChange={setProfile}
-                >
+                <DropdownMenuRadioGroup>
                   <DropdownMenuItem className="cursor-pointer font-600 text-lg gap-2">
                     <User />
                     Profl

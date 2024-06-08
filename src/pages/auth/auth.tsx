@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useTheme } from "@/components/ui/themeProvider";
 import {
   Form,
   FormControl,
@@ -15,21 +16,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-interface AuthProps {
-  setAuthToken: (token: string) => void;
-}
+const Auth = () => {
+  const [load, setLoad] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { setToken } = useTheme();
 
-const Auth: React.FC<AuthProps> = ({ setAuthToken }) => {
-  const [load, setLoad] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const formSchema = z.object({
     email: z.string().min(4, {
-      message: "Username must be at least 4 characters.",
-    }),
+      message: "Email must be at least 4 characters.",
+    }).email("Invalid email address"),
     password: z.string().min(6, {
       message: "Password must be at least 6 characters.",
     }),
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,8 +37,11 @@ const Auth: React.FC<AuthProps> = ({ setAuthToken }) => {
       password: "",
     },
   });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoad(true);
+    setErrorMessage("");
+
     try {
       const response = await axios.post(
         `https://test.globalmove.uz/api/auth/admin/signin`,
@@ -46,22 +49,21 @@ const Auth: React.FC<AuthProps> = ({ setAuthToken }) => {
           email: values.email,
           password: values.password,
         }
-        );
-      
+      );
+
       const token = response.data.data;
-      window.localStorage.setItem("token", JSON.stringify(token));
-      setAuthToken(token);
-      setLoad(false)
-      
-    } catch(err) {
-      setErrorMessage(err.response.data.message)
-      setLoad(false)
+      setToken(token);
+    } catch (err) {
+      const errorResponse = err as any;
+      setErrorMessage(errorResponse.response?.data?.message || "An error occurred");
+    } finally {
+      setLoad(false);
     }
   };
 
   return (
     <div className="auth-page grid place-items-center min-h-[100vh] w-full">
-      <div className="login-block w-96 border border-current rounded-xl p-7  ">
+      <div className="login-block w-96 border border-current rounded-xl p-7">
         <h1 className="font-bold text-3xl mb-5">
           Welcome to UzChess <br /> Dashboard
         </h1>
@@ -93,11 +95,18 @@ const Auth: React.FC<AuthProps> = ({ setAuthToken }) => {
                 </FormItem>
               )}
             />
-
-              {errorMessage !== '' ? <span className="text-sm mt-1 text-red-500">{errorMessage}</span> : null}
-            <Button disabled={load ? true : false}  className="w-full" type="submit">
-              {load ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait ...</> : "Login"}
-
+            {errorMessage && (
+              <span className="text-sm mt-1 text-red-500">{errorMessage}</span>
+            )}
+            <Button disabled={load} className="w-full" type="submit">
+              {load ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                  ...
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </Form>
