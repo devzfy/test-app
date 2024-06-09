@@ -17,6 +17,7 @@ import { Eye, Pencil, Trash2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useGet from "@/components/hooks/useGet";
 import { useEffect, useMemo, useState } from "react";
+import classNames from "classnames";
 
 
 export type Lessons = {
@@ -86,11 +87,6 @@ const Course = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  
-            console.log(table.getRowModel().rows.map(row => row.getVisibleCells().map(cell => cell.column.columnDef)))
-
- 
-
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
@@ -127,12 +123,15 @@ const Course = () => {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      
+                    <TableCell key={cell.id} className={classNames(`${cell.id === '0_lessons_count' ? 'flex items-center gap-1' : null}`)}>
+                      {cell.id === '0_lessons_count' ? <Play className="w-4 h-4" /> : null}
+
+                      <span>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
+                      </span>
                     </TableCell>
                   ))}
                 </TableRow>
