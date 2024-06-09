@@ -81,7 +81,7 @@ const Auth = () => {
     <div className="auth-page grid place-items-center min-h-[100vh] w-full">
       <div className="login-block w-96 border border-current rounded-xl p-7">
         <h1 className="font-bold text-3xl mb-5">
-          Welcome to UzChess <br /> Dashboard
+          Welcome to UzChess <br /> Platform
         </h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
