@@ -13,18 +13,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import useGet from "@/components/hooks/useGet";
+import { useEffect, useMemo, useState } from "react";
 
-const data: Lessons[] = [
-  {
-    id: "1",
-    name: "English",
-    description: "lorem ipsum",
-    lessons_count: 5,
-    duration: 112,
-  },
-];
 
 export type Lessons = {
   id: string;
@@ -33,6 +26,8 @@ export type Lessons = {
   lessons_count: number;
   duration: number;
 };
+
+
 
 const columns: ColumnDef<Lessons>[] = [
   {
@@ -73,11 +68,34 @@ const columns: ColumnDef<Lessons>[] = [
 ];
 
 const Course = () => {
+  const { data:result, error, isLoading } = useGet({url: 'courses/active', name:'courses'});
+
+  const [data, setData] = useState<Lessons[]>([])
+
+  useEffect(()=>{
+    if(result){
+      setData([result.data])
+    }
+    },[result])
+    
+  const memoizedData = useMemo(() => data, [data]);
+  
   const table = useReactTable({
-    data,
     columns,
+    data: memoizedData ,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  
+            console.log(table.getRowModel().rows.map(row => row.getVisibleCells().map(cell => cell.column.columnDef)))
+
+ 
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  
+  
 
   return (
     <div className="w-full">
@@ -110,6 +128,7 @@ const Course = () => {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
+                      
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

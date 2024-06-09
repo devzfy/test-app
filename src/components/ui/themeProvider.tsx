@@ -12,10 +12,13 @@ type ThemeProviderProps = {
 type ThemeProviderState = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+
   isActive: boolean;
   toggleClass: () => void;
+
   token: string | null;
   setToken: (token: string) => void;
+  
   removeToken: ()=> void
 };
 

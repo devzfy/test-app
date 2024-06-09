@@ -8,12 +8,14 @@ import { useTheme } from "./components/ui/themeProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "./components/ui/toaster";
 import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 function App() {
   const { token } = useTheme();
   const { toast } = useToast();
+  const query = new QueryClient();
 
   useEffect(() => {
-    toast({ 
+    toast({
       title: "Muvaffaqiyat!",
       description: "UzChess platformasiga hush kelibsiz",
     });
@@ -26,14 +28,16 @@ function App() {
       </div>
       <div className="w-full">
         <Header />
-        <div className="p-7">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/course" element={<Course />} />
-          </Routes>
-        </div>
+        <QueryClientProvider client={query}>
+          <div className="p-7">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/course" element={<Course />} />
+            </Routes>
+          </div>
+        </QueryClientProvider>
       </div>
-      <Toaster/>
+      <Toaster />
     </div>
   );
   // logical wrong
