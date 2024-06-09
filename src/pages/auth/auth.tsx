@@ -16,6 +16,17 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
+
+interface errResponse {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+  message: string;
+  statusCode: number;
+}
+
 const Auth = () => {
   const [load, setLoad] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -57,8 +68,9 @@ const Auth = () => {
       const token = response.data.data
       setToken(token)
     } catch (err) {
+      const errorResponse = err as errResponse 
       setErrorMessage(
-        err.response?.data?.message || 'An error occurred',
+        errorResponse.response?.data?.message || 'An error occurred',
       )
     } finally {
       setLoad(false)
