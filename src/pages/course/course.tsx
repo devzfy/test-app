@@ -3,7 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -12,44 +12,41 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Eye, Pencil, Trash2, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import useGet from "@/components/hooks/useGet";
-import { useEffect, useMemo, useState } from "react";
-import classNames from "classnames";
-
+} from '@/components/ui/table'
+import { Eye, Pencil, Trash2, Play } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import useGet from '@/components/hooks/useGet'
+import { useEffect, useMemo, useState } from 'react'
+import classNames from 'classnames'
 
 export type Lessons = {
-  id: string;
-  name: string;
-  description: string;
-  lessons_count: number;
-  duration: number;
-};
-
-
+  id: string
+  name: string
+  description: string
+  lessons_count: number
+  duration: number
+}
 
 const columns: ColumnDef<Lessons>[] = [
   {
-    accessorKey: "name",
-    header: "Kurs nomi",
+    accessorKey: 'name',
+    header: 'Kurs nomi',
   },
   {
-    accessorKey: "description",
-    header: "Tavfsifi",
+    accessorKey: 'description',
+    header: 'Tavfsifi',
   },
   {
-    accessorKey: "lessons_count",
-    header: "Darslar soni",
+    accessorKey: 'lessons_count',
+    header: 'Darslar soni',
   },
   {
-    accessorKey: "duration",
-    header: "Davomiyligi",
+    accessorKey: 'duration',
+    header: 'Davomiyligi',
   },
   {
-    id: "actions",
-    header: "Taxrirlash",
+    id: 'actions',
+    header: 'Taxrirlash',
     cell: () => {
       return (
         <div className="gap-2 flex">
@@ -63,35 +60,36 @@ const columns: ColumnDef<Lessons>[] = [
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
-      );
+      )
     },
   },
-];
+]
 
 const Course = () => {
-  const { data:result, error, isLoading } = useGet({url: 'courses/active', name:'courses'});
+  const {
+    data: result,
+    error,
+    isLoading,
+  } = useGet({ url: 'courses/active', name: 'courses' })
 
   const [data, setData] = useState<Lessons[]>([])
 
-  useEffect(()=>{
-    if(result){
+  useEffect(() => {
+    if (result) {
       setData([result.data])
     }
-    },[result])
-    
-  const memoizedData = useMemo(() => data, [data]);
-  
+  }, [result])
+
+  const memoizedData = useMemo(() => data, [data])
+
   const table = useReactTable({
     columns,
-    data: memoizedData ,
+    data: memoizedData,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
-
-  
-  
 
   return (
     <div className="w-full">
@@ -107,10 +105,10 @@ const Course = () => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -120,17 +118,24 @@ const Course = () => {
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className={classNames(`${cell.id === '0_lessons_count' ? 'flex items-center gap-1' : null}`)}>
-                      {cell.id === '0_lessons_count' ? <Play className="w-4 h-4" /> : null}
+                    <TableCell
+                      key={cell.id}
+                      className={classNames(
+                        `${cell.id === '0_lessons_count' ? 'flex items-center gap-1' : null}`,
+                      )}
+                    >
+                      {cell.id === '0_lessons_count' ? (
+                        <Play className="w-4 h-4" />
+                      ) : null}
 
                       <span>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
                       </span>
                     </TableCell>
                   ))}
@@ -150,6 +155,6 @@ const Course = () => {
         </Table>
       </div>
     </div>
-  );
-};
-export default Course;
+  )
+}
+export default Course

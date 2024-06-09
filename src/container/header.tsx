@@ -1,6 +1,6 @@
-import { FoldHorizontal, Sun, User, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/ui/themeProvider";
+import { FoldHorizontal, Sun, User, LogOut } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useTheme } from '@/components/ui/themeProvider'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -8,21 +8,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-type Theme = "dark" | "light" | "system";
+} from '@/components/ui/dropdown-menu'
+type Theme = 'dark' | 'light' | 'system'
 const Header = () => {
-  const {setTheme, toggleClass, removeToken} = useTheme();
-  const handelLogOut = ()=>{
+  const { setTheme, toggleClass, removeToken } = useTheme()
+  const handelLogOut = () => {
     removeToken()
   }
-  
-  
 
   return (
     <div>
       <div className="header w-full border-b-2  p-3 h-16 flex justify-between">
         <div className="">
-          <Button onClick={toggleClass} variant="outline" className="p-2 border-2 rounded-lg">
+          <Button
+            onClick={toggleClass}
+            variant="outline"
+            className="p-2 border-2 rounded-lg"
+          >
             <FoldHorizontal />
           </Button>
         </div>
@@ -38,7 +40,9 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[200px]" align="end">
-                <DropdownMenuRadioGroup  onValueChange={(value: string) => setTheme(value as Theme)}>
+                <DropdownMenuRadioGroup
+                  onValueChange={(value: string) => setTheme(value as Theme)}
+                >
                   <DropdownMenuRadioItem
                     value="light"
                     className="cursor-pointer font-600 text-lg"
@@ -77,7 +81,12 @@ const Header = () => {
                     <User />
                     Profl
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={()=>{handelLogOut()}} className="cursor-pointer font-600 text-lg gap-2">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      handelLogOut()
+                    }}
+                    className="cursor-pointer font-600 text-lg gap-2"
+                  >
                     <LogOut />
                     Chiqish
                   </DropdownMenuItem>
@@ -88,7 +97,7 @@ const Header = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
