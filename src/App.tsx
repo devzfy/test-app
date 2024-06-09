@@ -5,21 +5,13 @@ import Header from './container/header'
 import Course from './pages/course/course'
 import Sidebar from './components/ui/sidebar'
 import { useTheme } from './components/ui/themeProvider'
-import { useToast } from '@/components/ui/use-toast'
-import { Toaster } from './components/ui/toaster'
-import { useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 function App() {
   const { token } = useTheme()
-  const { toast } = useToast()
+
   const query = new QueryClient()
 
-  useEffect(() => {
-    toast({
-      title: 'Muvaffaqiyat!',
-      description: 'UzChess platformasiga hush kelibsiz',
-    })
-  }, [])
+ 
   if (!token) return <Auth />
   return (
     <div className="flex justify-between">
@@ -37,7 +29,6 @@ function App() {
           </div>
         </QueryClientProvider>
       </div>
-      <Toaster />
     </div>
   )
   // logical wrong

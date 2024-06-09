@@ -57,9 +57,8 @@ const Auth = () => {
       const token = response.data.data
       setToken(token)
     } catch (err) {
-      const errorResponse = err as any
       setErrorMessage(
-        errorResponse.response?.data?.message || 'An error occurred',
+        err.response?.data?.message || 'An error occurred',
       )
     } finally {
       setLoad(false)
