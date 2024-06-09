@@ -9,9 +9,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-
+type Theme = "dark" | "light" | "system";
 const Header = () => {
-  const {setTheme, toggleClass, removeToken} = useTheme("light");
+  const {setTheme, toggleClass, removeToken} = useTheme();
   const handelLogOut = ()=>{
     removeToken()
   }
@@ -38,7 +38,7 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[200px]" align="end">
-                <DropdownMenuRadioGroup stringoup  value={setTheme} onValueChange={setTheme}>
+                <DropdownMenuRadioGroup  onValueChange={(value: string) => setTheme(value as Theme)}>
                   <DropdownMenuRadioItem
                     value="light"
                     className="cursor-pointer font-600 text-lg"
