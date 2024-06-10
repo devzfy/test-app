@@ -1,12 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useState } from 'react'
-import axios from 'axios'
-import { Loader2 } from 'lucide-react'
-import { useTheme } from '@/components/ui/themeProvider'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import axios from 'axios';
+import { Loader2 } from 'lucide-react';
+import { useTheme } from '@/components/ui/themeProvider';
 import {
   Form,
   FormControl,
@@ -14,35 +14,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from '@/components/ui/form';
 
-
-interface errResponse {
+interface ErrResponse {
   response: {
     data: {
       message: string;
     };
   };
-  message: string;
-  statusCode: number;
 }
 
 const Auth = () => {
-  const [load, setLoad] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const { setToken } = useTheme()
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const { setToken } = useTheme();
 
   const formSchema = z.object({
     email: z
       .string()
-      .min(4, {
-        message: 'Email must be at least 4 characters.',
-      })
+      .min(4, { message: 'Email must be at least 4 characters.' })
       .email('Invalid email address'),
-    password: z.string().min(6, {
-      message: 'Password must be at least 6 characters.',
-    }),
-  })
+    password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,32 +43,23 @@ const Auth = () => {
       email: '',
       password: '',
     },
-  })
+  });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setLoad(true)
-    setErrorMessage('')
+    setLoading(true);
+    setErrorMessage('');
 
     try {
-      const response = await axios.post(
-        `https://test.globalmove.uz/api/auth/admin/signin`,
-        {
-          email: values.email,
-          password: values.password,
-        },
-      )
-
-      const token = response.data.data
-      setToken(token)
-    } catch (err) {
-      const errorResponse = err as errResponse 
-      setErrorMessage(
-        errorResponse.response?.data?.message || 'An error occurred',
-      )
+      const response = await axios.post('https://test.globalmove.uz/api/auth/admin/signin', values);
+      const token = response.data.data;
+      setToken(token);
+    } catch (error) {
+      const err = error as ErrResponse;
+      setErrorMessage(err.response?.data?.message || 'An error occurred');
     } finally {
-      setLoad(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="auth-page grid place-items-center min-h-[100vh] w-full">
@@ -111,14 +95,11 @@ const Auth = () => {
                 </FormItem>
               )}
             />
-            {errorMessage && (
-              <span className="text-sm mt-1 text-red-500">{errorMessage}</span>
-            )}
-            <Button disabled={load} className="w-full" type="submit">
-              {load ? (
+            {errorMessage && <span className="text-sm mt-1 text-red-500">{errorMessage}</span>}
+            <Button disabled={loading} className="w-full" type="submit">
+              {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                  ...
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait ...
                 </>
               ) : (
                 'Login'
@@ -128,7 +109,7 @@ const Auth = () => {
         </Form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Auth
+export default Auth;

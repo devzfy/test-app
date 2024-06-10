@@ -1,42 +1,33 @@
-import api from '@/service/api'
+import api from '@/service/api';
 import {
   QueryFunctionContext,
   UseQueryOptions,
   UseQueryResult,
   useQuery,
-} from '@tanstack/react-query'
+} from '@tanstack/react-query';
 
 interface IQueryKeyArgs {
-  url: string
-}
-interface IProps {
-  name: string
-  url: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  queryOptions?: UseQueryOptions<any, any, any, any>
+  url: string;
 }
 
-async function fetch({
-  queryKey,
-}: QueryFunctionContext<[string, IQueryKeyArgs]>) {
-  const { url } = queryKey[1]
-
-  const res = await api.get(url)
-  return res.data
+interface IProps<TData> {
+  name: string;
+  url: string;
+  queryOptions?: UseQueryOptions<TData, unknown, TData, [string, IQueryKeyArgs]>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function useGet(args: IProps): UseQueryResult<any> {
-  const { name, queryOptions, url } = args
+async function fetch<TData>({ queryKey }: QueryFunctionContext<[string, IQueryKeyArgs]>): Promise<TData> {
+  const { url } = queryKey[1];
+  const res = await api.get(url);
+  return res.data;
+}
 
-  const data = useQuery({
-    queryKey: [`${name}`, { url }],
+function useGet<TData>({ name, url, queryOptions }: IProps<TData>): UseQueryResult<TData, unknown> {
+  return useQuery({
+    queryKey: [name, { url }],
     queryFn: fetch,
     ...queryOptions,
-  })
-
-  return {
-    ...data,
-  }
+  });
 }
-export default useGet
+
+export default useGet;
