@@ -7,6 +7,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useTheme } from '@/components/ui/themeProvider';
+import { useMutation } from '@tanstack/react-query';
 import {
   Form,
   FormControl,
@@ -20,12 +21,12 @@ interface ErrResponse {
   response: {
     data: {
       message: string;
+      isLoading: any
     };
   };
 }
 
 const Auth = () => {
-  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { setToken } = useTheme();
 
@@ -45,20 +46,28 @@ const Auth = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setLoading(true);
-    setErrorMessage('');
+  const mutation = useMutation(
+    {
+      mutationFn:  async (values: z.infer<typeof formSchema>) => {
+        const response = await axios.post('https://test.globalmove.uz/api/auth/admin/signin', values);
+        return response.data.data;
+      },
 
-    try {
-      const response = await axios.post('https://test.globalmove.uz/api/auth/admin/signin', values);
-      const token = response.data.data;
-      setToken(token);
-    } catch (error) {
-      const err = error as ErrResponse;
-      setErrorMessage(err.response?.data?.message || 'An error occurred');
-    } finally {
-      setLoading(false);
+      onSuccess: (token) => {
+        setToken(token);
+      },
+      onError: (error: ErrResponse) => {
+        setErrorMessage(error.response?.data?.message || 'An error occurred');
+      },
+      onSettled: () => {
+        form.reset();
+      },
     }
+  );
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    setErrorMessage('');
+    mutation.mutate(values);
   };
 
   return (
@@ -96,8 +105,8 @@ const Auth = () => {
               )}
             />
             {errorMessage && <span className="text-sm mt-1 text-red-500">{errorMessage}</span>}
-            <Button disabled={loading} className="w-full" type="submit">
-              {loading ? (
+            <Button disabled={mutation.isPending} className="w-full" type="submit">
+              {mutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait ...
                 </>

@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import Auth from './pages/auth/auth';
 import Home from './pages/home/home';
@@ -8,7 +7,6 @@ import Course from './pages/course/course';
 import Sidebar from './components/ui/sidebar';
 import { useTheme } from './components/ui/themeProvider';
 
-const queryClient = new QueryClient();
 
 function App() {
   const { token } = useTheme();
@@ -16,7 +14,6 @@ function App() {
   if (!token) return <Auth />;
 
   return (
-    <QueryClientProvider client={queryClient}>
       <div className="flex justify-between">
         <Sidebar />
         <div className="w-full">
@@ -29,7 +26,6 @@ function App() {
           </div>
         </div>
       </div>
-    </QueryClientProvider>
   );
 }
 

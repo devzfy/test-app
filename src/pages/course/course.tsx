@@ -13,6 +13,17 @@ export type Lessons = {
   duration: number;
 };
 
+interface errRes  {
+  error: boolean;
+  message: string
+}
+
+interface resData {
+  data: any;
+  error: boolean;
+  message: string
+}
+
 const columns: ColumnDef<Lessons>[] = [
   {
     accessorKey: 'name',
@@ -25,10 +36,10 @@ const columns: ColumnDef<Lessons>[] = [
   {
     accessorKey: 'lessons_count',
     header: 'Darslar soni',
-    cell: ({ getValue }) => (
+    cell: () => (
       <div className="flex items-center gap-1">
         <Play className="w-4 h-4" />
-        <span>{getValue()}</span>
+        <span>60</span>
       </div>
     ),
   },
@@ -61,9 +72,12 @@ const Course = () => {
 
   useEffect(() => {
     if (result) {
-      setData([result.data]);
+      const resultData = result as resData
+      setData([resultData.data]);
     }
   }, [result]);
+  console.log(data, 'data');
+  
 
   const table = useReactTable({
     columns,
@@ -72,7 +86,10 @@ const Course = () => {
   });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error)  {
+    const err = error as errRes 
+    return <div>{err.message}</div>;
+  };
 
   return (
     <div className="w-full">
